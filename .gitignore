@@ -135,12 +135,27 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# FRONTEND - Flutter / Dart
-frontend/.dart_tool/
-frontend/.packages
-frontend/.flutter-plugins
-frontend/.flutter-plugins-dependencies
-frontend/.idea/
-frontend/build/
-frontend/.vscode/
-frontend/*.iml
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+build/
+coverage/
+.melosecrets
+generated_plugin_registrant.dart
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# Outros
+*.lock
+*.log
+
