@@ -1,0 +1,35 @@
+{
+  $jsonSchema: {
+    bsonType: 'object',
+    title: 'Validação de objeto Desafio',
+    required: [
+      'usuario_id',
+      'titulo',
+      'duracao_dias',
+      'criado_em'
+    ],
+    properties: {
+      usuario_id: {
+        bsonType: 'objectId',
+        description: '\'usuario_id\' deve ser um ObjectId válido e é obrigatório'
+      },
+      titulo: {
+        bsonType: 'string',
+        description: '\'titulo\' deve ser uma string e é obrigatório'
+      },
+      descricao: {
+        bsonType: 'string',
+        description: '\'descricao\' deve ser uma string se fornecida'
+      },
+      duracao_dias: {
+        bsonType: 'int',
+        minimum: 1,
+        description: '\'duracao_dias\' deve ser um número inteiro >= 1 e é obrigatório'
+      },
+      criado_em: {
+        bsonType: 'date',
+        description: '\'criado_em\' deve ser uma data e é obrigatório'
+      }
+    }
+  }
+}
