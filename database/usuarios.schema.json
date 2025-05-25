@@ -1,0 +1,36 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "title": "Valida\u00e7\u00e3o de objeto Usuario",
+    "required": [
+      "nome",
+      "email",
+      "senha_hash",
+      "casal_id",
+      "criado_em"
+    ],
+    "properties": {
+      "nome": {
+        "bsonType": "string",
+        "description": "'nome' deve ser uma string e \u00e9 obrigat\u00f3rio"
+      },
+      "email": {
+        "bsonType": "string",
+        "pattern": "^.+@.+\\..+$",
+        "description": "'email' deve ser v\u00e1lido e \u00e9 obrigat\u00f3rio"
+      },
+      "senha_hash": {
+        "bsonType": "string",
+        "description": "'senha_hash' deve ser uma string e \u00e9 obrigat\u00f3rio"
+      },
+      "casal_id": {
+        "bsonType": "objectId",
+        "description": "'casal_id' deve ser um ObjectId v\u00e1lido e \u00e9 obrigat\u00f3rio"
+      },
+      "criado_em": {
+        "bsonType": "date",
+        "description": "'criado_em' deve ser uma data e \u00e9 obrigat\u00f3rio"
+      }
+    }
+  }
+}

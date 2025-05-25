@@ -1,0 +1,39 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "title": "Valida\u00e7\u00e3o de objeto Data Importante",
+    "required": [
+      "usuario_id",
+      "titulo",
+      "data_evento",
+      "lembrete_ativo",
+      "criado_em"
+    ],
+    "properties": {
+      "usuario_id": {
+        "bsonType": "objectId",
+        "description": "'usuario_id' deve ser um ObjectId v\u00e1lido e \u00e9 obrigat\u00f3rio"
+      },
+      "titulo": {
+        "bsonType": "string",
+        "description": "'titulo' deve ser uma string e \u00e9 obrigat\u00f3rio"
+      },
+      "descricao": {
+        "bsonType": "string",
+        "description": "'descricao' deve ser uma string se fornecida"
+      },
+      "data_evento": {
+        "bsonType": "date",
+        "description": "'data_evento' deve ser uma data e \u00e9 obrigat\u00f3ria"
+      },
+      "lembrete_ativo": {
+        "bsonType": "bool",
+        "description": "'lembrete_ativo' deve ser booleano e \u00e9 obrigat\u00f3rio"
+      },
+      "criado_em": {
+        "bsonType": "date",
+        "description": "'criado_em' deve ser uma data e \u00e9 obrigat\u00f3rio"
+      }
+    }
+  }
+}
