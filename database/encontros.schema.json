@@ -1,0 +1,43 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "title": "Valida\u00e7\u00e3o de objeto Encontro",
+    "required": [
+      "usuario_id",
+      "titulo",
+      "data_encontro",
+      "lembrete_ativo",
+      "criado_em"
+    ],
+    "properties": {
+      "usuario_id": {
+        "bsonType": "objectId",
+        "description": "'usuario_id' deve ser um ObjectId v\u00e1lido e \u00e9 obrigat\u00f3rio"
+      },
+      "titulo": {
+        "bsonType": "string",
+        "description": "'titulo' deve ser uma string e \u00e9 obrigat\u00f3rio"
+      },
+      "descricao": {
+        "bsonType": "string",
+        "description": "'descricao' deve ser uma string se fornecida"
+      },
+      "data_encontro": {
+        "bsonType": "date",
+        "description": "'data_encontro' deve ser uma data e \u00e9 obrigat\u00f3ria"
+      },
+      "local": {
+        "bsonType": "string",
+        "description": "'local' deve ser uma string se fornecido"
+      },
+      "lembrete_ativo": {
+        "bsonType": "bool",
+        "description": "'lembrete_ativo' deve ser booleano e \u00e9 obrigat\u00f3rio"
+      },
+      "criado_em": {
+        "bsonType": "date",
+        "description": "'criado_em' deve ser uma data e \u00e9 obrigat\u00f3rio"
+      }
+    }
+  }
+}
