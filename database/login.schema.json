@@ -1,0 +1,42 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": [
+      "username",
+      "email",
+      "password",
+      "createdAt"
+    ],
+    "properties": {
+      "username": {
+        "bsonType": "string",
+        "description": "Deve ser uma string e é obrigatório"
+      },
+      "email": {
+        "bsonType": "string",
+        "pattern": "^.+@.+\\..+$",
+        "description": "Deve ser uma string com formato de e-mail e é obrigatório"
+      },
+      "password": {
+        "bsonType": "string",
+        "minLength": 6,
+        "description": "Deve ser uma string com pelo menos 6 caracteres e é obrigatório"
+      },
+      "lastLogin": {
+        "bsonType": [
+          "date",
+          "null"
+        ],
+        "description": "Data do último login, pode ser nulo"
+      },
+      "createdAt": {
+        "bsonType": "date",
+        "description": "Data de criação do usuário e é obrigatório"
+      },
+      "isActive": {
+        "bsonType": "bool",
+        "description": "Indica se o usuário está ativo"
+      }
+    }
+  }
+}
