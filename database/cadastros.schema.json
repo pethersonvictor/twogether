@@ -23,11 +23,11 @@
         "description": "Senha é obrigatória e deve ser uma string"
       },
       "telefone": {
-        "bsonType": "string",
+        "bsonType": "int",
         "description": "Telefone deve ser uma string"
       },
       "cpf": {
-        "bsonType": "string",
+        "bsonType": "int",
         "description": "CPF deve ser uma string"
       },
       "dataCadastro": {
@@ -42,7 +42,7 @@
             "bsonType": "string"
           },
           "numero": {
-            "bsonType": "string"
+            "bsonType": "int"
           },
           "bairro": {
             "bsonType": "string"
@@ -54,7 +54,7 @@
             "bsonType": "string"
           },
           "cep": {
-            "bsonType": "string"
+            "bsonType": "int"
           }
         }
       }
