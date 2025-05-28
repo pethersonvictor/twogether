@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+// models/Cadastro.js
+
+import mongoose from 'mongoose';
 
 const EnderecoSchema = new mongoose.Schema({
   rua: String,
@@ -19,4 +21,8 @@ const cadastroSchema = new mongoose.Schema({
   endereco: EnderecoSchema
 });
 
-module.exports = mongoose.model(Cadastro, UsuarioSchema);
+// Corrigido: nome do modelo como string + schema correto
+const Cadastro = mongoose.model('Cadastro', cadastroSchema);
+
+// Exporta como default para funcionar com "import Cadastro from ..."
+export default Cadastro;

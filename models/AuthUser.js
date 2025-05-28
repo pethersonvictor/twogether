@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const AuthUserSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -13,4 +13,8 @@ const AuthUserSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true }
 });
 
-module.exports = mongoose.model(AuthUser, AuthUserSchema);
+// Exportando como default
+const AuthUser = mongoose.model('AuthUser', AuthUserSchema);
+export default AuthUser;
+
+
