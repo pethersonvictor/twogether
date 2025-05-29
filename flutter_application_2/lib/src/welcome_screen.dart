@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import Provider
-import 'package:myapp/auth_state_service.dart'; // Import AuthStateService
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -61,7 +59,10 @@ class _MyWidgetState extends State<MyWidget> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  child: const Text(
+                    'Entrar',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               ),
 
@@ -82,7 +83,10 @@ class _MyWidgetState extends State<MyWidget> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text('Cadastrar', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  child: const Text(
+                    'Cadastrar',
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
               ),
             ],

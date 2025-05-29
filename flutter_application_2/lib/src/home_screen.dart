@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:async'; // Para o contador regressivo
-import 'package:myapp/src/settings_screen.dart'; // Para navegar para as configurações
+
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart'; // Importe Provider
 import 'package:myapp/auth_state_service.dart'; // Importe AuthStateService
-import 'package:myapp/services/api_service.dart'; // Importe ApiService para logout
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -59,14 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Acessa o AuthStateService para obter o nome de usuário real
     final authService = Provider.of<AuthStateService>(context);
-    final String welcomeUserName = authService.userName ?? 'Casal'; // Se não houver nome, usa 'Casal'
+    final String welcomeUserName =
+        authService.userName ?? 'Casal'; // Se não houver nome, usa 'Casal'
 
     // --- Dados Simulados para o Progresso dos Desafios na Home ---
     final int simulatedTotalChallenges = 5;
     final int simulatedCompletedChallenges = 2;
-    final double simulatedChallengeProgress = simulatedTotalChallenges == 0 ? 0.0 : simulatedCompletedChallenges / simulatedTotalChallenges;
+    final double simulatedChallengeProgress =
+        simulatedTotalChallenges == 0
+            ? 0.0
+            : simulatedCompletedChallenges / simulatedTotalChallenges;
     // --- Fim dos Dados Simulados ---
-
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -111,7 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Column(
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 50, left: 16, right: 16, bottom: 10),
+                padding: const EdgeInsets.only(
+                  top: 50,
+                  left: 16,
+                  right: 16,
+                  bottom: 10,
+                ),
                 color: Colors.transparent,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,7 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       'assets/logo_small.png',
                       height: 40,
                       errorBuilder: (context, error, stackTrace) {
-                        return const Text('gether', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white));
+                        return const Text(
+                          'gether',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        );
                       },
                     ),
                     IconButton(
@@ -144,13 +158,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CircleAvatar(
                             radius: 40,
-                            backgroundImage: Image.asset('assets/couple_avatar.png').image,
+                            backgroundImage:
+                                Image.asset('assets/couple_avatar.png').image,
                             onBackgroundImageError: (exception, stackTrace) {
-                              debugPrint('Error loading couple avatar: $exception');
+                              debugPrint(
+                                'Error loading couple avatar: $exception',
+                              );
                             },
                           ),
                           const SizedBox(width: 15),
-                          Text( // MUDOU AQUI: Agora mostra o nome do usuário
+                          Text(
+                            // MUDOU AQUI: Agora mostra o nome do usuário
                             'Olá, ${welcomeUserName}!',
                             style: const TextStyle(
                               fontSize: 28,
@@ -165,10 +183,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 10,
+                        ),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: <Color>[Color(0xFFFF6B81), Color(0xFFA084E8)],
+                            colors: <Color>[
+                              Color(0xFFFF6B81),
+                              Color(0xFFA084E8),
+                            ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                           ),
@@ -206,10 +230,46 @@ class _HomeScreenState extends State<HomeScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Expanded(child: Text('Dias', style: TextStyle(color: Colors.white70, fontSize: 14), textAlign: TextAlign.center)),
-                                Expanded(child: Text('Horas', style: TextStyle(color: Colors.white70, fontSize: 14), textAlign: TextAlign.center)),
-                                Expanded(child: Text('Minutos', style: TextStyle(color: Colors.white70, fontSize: 14), textAlign: TextAlign.center)),
-                                Expanded(child: Text('Segundos', style: TextStyle(color: Colors.white70, fontSize: 14), textAlign: TextAlign.center)),
+                                Expanded(
+                                  child: Text(
+                                    'Dias',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Horas',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Minutos',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    'Segundos',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 14,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -234,14 +294,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         context,
                         icon: Icons.emoji_events,
                         title: 'Desafio do Mês',
-                        subtitle: 'Status: ${simulatedCompletedChallenges}/${simulatedTotalChallenges} Concluído.',
+                        subtitle:
+                            'Status: ${simulatedCompletedChallenges}/${simulatedTotalChallenges} Concluído.',
                         color: const Color(0xFFFFF3E0),
                         onTap: () {
                           Navigator.pushNamed(context, '/monthly_challenges');
                         },
                         progressWidget: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                            vertical: 5.0,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
@@ -253,7 +317,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             barRadius: const Radius.circular(15),
                             backgroundColor: Colors.grey[200]!,
                             linearGradient: const LinearGradient(
-                              colors: <Color>[Color(0xFFFF6B81), Color(0xFFA084E8)],
+                              colors: <Color>[
+                                Color(0xFFFF6B81),
+                                Color(0xFFA084E8),
+                              ],
                               begin: Alignment.centerLeft,
                               end: Alignment.centerRight,
                             ),
@@ -281,7 +348,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Widget auxiliar para os cards de informação na parte branca
-  Widget _buildInfoCard(BuildContext context, {
+  Widget _buildInfoCard(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -328,11 +396,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios, size: 20, color: Colors.grey),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                    color: Colors.grey,
+                  ),
                 ],
               ),
-              if (progressWidget != null)
-                progressWidget,
+              if (progressWidget != null) progressWidget,
             ],
           ),
         ),
