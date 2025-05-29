@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-// Modelo simples para uma Sugestão de Encontro
 class DateSuggestion {
   final String title;
   final String description;
-  final List<String>
-  categories; // Ex: ['Romântico', 'Ao Ar Livre', 'Baixo Custo']
-  final String imageUrl; // Opcional
-  final bool isFavorite; // Para simular o estado de favorito
+  final List<String> categories;
+  final String imageUrl;
+  final bool isFavorite;
 
   DateSuggestion({
     required this.title,
@@ -16,6 +14,22 @@ class DateSuggestion {
     this.imageUrl = '',
     this.isFavorite = false,
   });
+
+  DateSuggestion copyWith({
+    String? title,
+    String? description,
+    List<String>? categories,
+    String? imageUrl,
+    bool? isFavorite,
+  }) {
+    return DateSuggestion(
+      title: title ?? this.title,
+      description: description ?? this.description,
+      categories: categories ?? this.categories,
+      imageUrl: imageUrl ?? this.imageUrl,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }
 
 class DateSuggestionsScreen extends StatefulWidget {
@@ -26,52 +40,48 @@ class DateSuggestionsScreen extends StatefulWidget {
 }
 
 class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
-  // Lista de sugestões de encontros (dados mockados para UI)
   List<DateSuggestion> _suggestions = [
     DateSuggestion(
       title: 'Piquenique no Parque',
       description:
           'Prepare uma cesta com comes e bebes e encontrem um lugar aconchegante no parque para um piquenique romântico.',
       categories: ['Ao Ar Livre', 'Romântico', 'Baixo Custo'],
-      imageUrl:
-          'assets/piquenique.jpeg', // Adicione esta imagem aos seus assets
+      imageUrl: 'assets/piquenique.jpeg',
     ),
     DateSuggestion(
       title: 'Noite de Cinema em Casa',
       description:
           'Escolham um filme, façam pipoca, apaguem as luzes e criem um ambiente de cinema no conforto do lar.',
       categories: ['Em Casa', 'Relaxamento', 'Baixo Custo'],
-      imageUrl: 'assets/cinema.jpeg', // Adicione esta imagem aos seus assets
+      imageUrl: 'assets/cinema.jpeg',
     ),
     DateSuggestion(
       title: 'Aula de Culinária a Dois',
       description:
           'Aprendam a fazer um prato novo juntos, seja online ou em um curso presencial. A diversão é garantida!',
       categories: ['Gastronomia', 'Divertido', 'Experiência'],
-      imageUrl: 'assets/cozinhar.jpeg', // Adicione esta imagem aos seus assets
+      imageUrl: 'assets/cozinhar.jpeg',
     ),
     DateSuggestion(
       title: 'Explorar uma Nova Cidade/Bairro',
       description:
           'Visitem uma cidade próxima ou um bairro que vocês ainda não conhecem, descubram novos lugares e histórias.',
       categories: ['Aventura', 'Exploração'],
-      imageUrl: 'assets/viagem.jpeg', // Adicione esta imagem aos seus assets
+      imageUrl: 'assets/viagem.jpeg',
     ),
     DateSuggestion(
       title: 'Sessão de Jogos de Tabuleiro/Videogame',
       description:
           'Desafiem-se em jogos de tabuleiro, cartas ou videogames. Muita risada e competitividade saudável!',
       categories: ['Em Casa', 'Divertido'],
-      imageUrl: 'assets/jogos.jpeg', // Adicione esta imagem aos seus assets
+      imageUrl: 'assets/jogos.jpeg',
     ),
   ];
 
-  // Categoria atualmente selecionada para filtro
   String? _selectedCategory;
 
   @override
   Widget build(BuildContext context) {
-    // Filtrar sugestões com base na categoria selecionada
     final filteredSuggestions =
         _selectedCategory == null
             ? _suggestions
@@ -83,33 +93,22 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
       appBar: AppBar(
         title: const Text('Ideias de Encontros'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(
-          255,
-          255,
-          107,
-          129,
-        ), // Cor do seu degradê
+        backgroundColor: const Color.fromARGB(255, 255, 107, 129),
         foregroundColor: Colors.white,
       ),
       body: Column(
         children: [
-          // Área de Filtros (fundo branco)
           Container(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: 10.0,
             ),
-            color: Colors.white, // Fundo branco para os filtros
+            color: Colors.white,
             child: SingleChildScrollView(
-              // Permite rolagem horizontal dos chips
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  _buildFilterChip(
-                    context,
-                    'Todos',
-                    null,
-                  ), // Chip para mostrar todas as categorias
+                  _buildFilterChip(context, 'Todos', null),
                   _buildFilterChip(context, 'Romântico', 'Romântico'),
                   _buildFilterChip(context, 'Ao Ar Livre', 'Ao Ar Livre'),
                   _buildFilterChip(context, 'Em Casa', 'Em Casa'),
@@ -117,12 +116,10 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                   _buildFilterChip(context, 'Gastronomia', 'Gastronomia'),
                   _buildFilterChip(context, 'Baixo Custo', 'Baixo Custo'),
                   _buildFilterChip(context, 'Divertido', 'Divertido'),
-                  // Adicione mais categorias conforme necessário
                 ],
               ),
             ),
           ),
-          // Lista de Sugestões (fundo com degradê)
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
@@ -133,8 +130,7 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                 ),
               ),
               child:
-                  filteredSuggestions
-                          .isEmpty // Mensagem se não houver sugestões na categoria
+                  filteredSuggestions.isEmpty
                       ? const Center(
                         child: Text(
                           'Nenhuma sugestão encontrada para esta categoria.',
@@ -142,7 +138,6 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                         ),
                       )
                       : ListView.builder(
-                        // Constrói a lista de cards de sugestões
                         padding: const EdgeInsets.all(16.0),
                         itemCount: filteredSuggestions.length,
                         itemBuilder: (context, index) {
@@ -154,9 +149,7 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: InkWell(
-                              // Torna o card clicável
                               onTap: () {
-                                // Simula a navegação para uma tela de detalhes da sugestão
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -171,7 +164,6 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     if (suggestion.imageUrl.isNotEmpty) ...[
-                                      // Exibe imagem se existir
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.asset(
@@ -185,7 +177,6 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                             stackTrace,
                                           ) {
                                             return Container(
-                                              // Fallback se a imagem não carregar
                                               height: 150,
                                               color: Colors.grey[200],
                                               child: const Center(
@@ -215,16 +206,12 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                         fontSize: 14,
                                         color: Colors.grey,
                                       ),
-                                      maxLines: 2, // Limita a 2 linhas
-                                      overflow:
-                                          TextOverflow
-                                              .ellipsis, // Adiciona "..." se o texto for muito longo
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 8),
                                     Wrap(
-                                      // Para exibir as categorias como chips
-                                      spacing:
-                                          8.0, // Espaçamento entre os chips
+                                      spacing: 8.0,
                                       children:
                                           suggestion.categories
                                               .map(
@@ -237,9 +224,7 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                                   ),
                                                   backgroundColor: Colors
                                                       .deepPurple
-                                                      .withOpacity(
-                                                        0.2,
-                                                      ), // Cores suaves
+                                                      .withOpacity(0.2),
                                                   labelStyle: const TextStyle(
                                                     color: Colors.deepPurple,
                                                   ),
@@ -248,7 +233,6 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                               .toList(),
                                     ),
                                     Align(
-                                      // Ícone de favorito
                                       alignment: Alignment.bottomRight,
                                       child: IconButton(
                                         icon: Icon(
@@ -261,10 +245,18 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
                                                   : Colors.grey,
                                         ),
                                         onPressed: () {
+                                          setState(() {
+                                            final updatedSuggestion = suggestion
+                                                .copyWith(
+                                                  isFavorite:
+                                                      !suggestion.isFavorite,
+                                                );
+                                            _suggestions[index] =
+                                                updatedSuggestion;
+                                          });
                                           ScaffoldMessenger.of(
                                             context,
                                           ).showSnackBar(
-                                            // Simula marcar favorito
                                             SnackBar(
                                               content: Text(
                                                 suggestion.isFavorite
@@ -289,31 +281,22 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Simula a adição de uma nova sugestão
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Adicionar nova sugestão (UI Test)')),
           );
         },
-        backgroundColor: const Color.fromARGB(
-          255,
-          255,
-          107,
-          129,
-        ), // Cor do seu tema
-        child: const Icon(Icons.add, color: Colors.white), // Ícone de adicionar
+        backgroundColor: const Color.fromARGB(255, 255, 107, 129),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
     );
   }
 
-  // Widget auxiliar para os chips de filtro
   Widget _buildFilterChip(
     BuildContext context,
     String label,
     String? categoryValue,
   ) {
-    final isSelected =
-        _selectedCategory ==
-        categoryValue; // Verifica se o chip está selecionado
+    final isSelected = _selectedCategory == categoryValue;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       child: FilterChip(
@@ -321,10 +304,7 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
         selected: isSelected,
         onSelected: (bool selected) {
           setState(() {
-            _selectedCategory =
-                selected
-                    ? categoryValue
-                    : null; // Atualiza a categoria selecionada
+            _selectedCategory = selected ? categoryValue : null;
           });
         },
         selectedColor: const Color.fromARGB(
@@ -332,20 +312,14 @@ class _DateSuggestionsScreenState extends State<DateSuggestionsScreen> {
           255,
           107,
           129,
-        ).withOpacity(0.5), // Cor do chip selecionado
-        checkmarkColor: Colors.white, // Cor do checkmark
+        ).withOpacity(0.5),
+        checkmarkColor: Colors.white,
         labelStyle: TextStyle(
-          color:
-              isSelected
-                  ? Colors.white
-                  : Colors.black87, // Cor do texto do chip
+          color: isSelected ? Colors.white : Colors.black87,
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
-        backgroundColor:
-            Colors.grey[200], // Cor de fundo do chip não selecionado
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ), // Borda arredondada
+        backgroundColor: Colors.grey[200],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
     );
   }

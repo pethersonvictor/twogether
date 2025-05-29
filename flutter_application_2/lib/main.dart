@@ -1,10 +1,7 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart'; // Import para o Provider
-import 'package:myapp/auth_state_service.dart'; // Importa o seu serviço de estado
-
-// Importa todas as suas telas
+import 'package:provider/provider.dart';
+import 'package:myapp/auth_state_service.dart';
 import 'package:myapp/src/welcome_screen.dart';
 import 'package:myapp/src/cadastro_screen.dart';
 import 'package:myapp/src/entrar_screen.dart';
@@ -17,8 +14,8 @@ import 'package:myapp/src/settings_screen.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider( // Adiciona o Provider no topo da árvore de widgets
-      create: (context) => AuthStateService(), // Cria uma instância do seu serviço de autenticação
+    ChangeNotifierProvider(
+      create: (context) => AuthStateService(),
       child: const MyApp(),
     ),
   );
@@ -32,10 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       locale: const Locale('pt', 'BR'),
-      supportedLocales: const [
-        Locale('pt', 'BR'),
-        Locale('en', 'US'),
-      ],
+      supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -45,13 +39,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // initialRoute: '/welcome', // Não define initialRoute aqui se usar AuthWrapper
-      home: Consumer<AuthStateService>( // Usa Consumer para reagir às mudanças do AuthStateService
+      home: Consumer<AuthStateService>(
         builder: (context, authService, _) {
           if (authService.isLoggedIn) {
-            return const MainAppScreen(); // Se logado, vai para a MainAppScreen
+            return const MainAppScreen();
           } else {
-            return const MyWidget(); // Se não logado, vai para a WelcomeScreen
+            return const MyWidget();
           }
         },
       ),
@@ -59,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => const MyWidget(),
         '/login': (context) => const EntrarScreen(),
         '/cadastro': (context) => const CadastroScreen(),
-        '/home': (context) => const MainAppScreen(), // Mantido, mas o home: Consumer já lida com o inicial
+        '/home': (context) => const MainAppScreen(),
         '/calendar': (context) => const CalendarScreen(),
         '/date_suggestions': (context) => const DateSuggestionsScreen(),
         '/monthly_challenges': (context) => const MonthlyChallengesScreen(),

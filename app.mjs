@@ -159,7 +159,7 @@ app.post('/auth/register', async (req, res) => {
 
     const token = jwt.sign(
       { id: salvo._id, email: salvo.email },
-      'seuSegredoJWT', // substitua por uma chave segura no .env
+      'seuSegredoJWT',
       { expiresIn: '1d' }
     );
 
@@ -192,7 +192,7 @@ app.post('/auth/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: usuario._id, email: usuario.email },
-      'seuSegredoJWT', // Substitua por uma chave segura, idealmente usando .env
+      'seuSegredoJWT', 
       { expiresIn: '1d' }
     );
 

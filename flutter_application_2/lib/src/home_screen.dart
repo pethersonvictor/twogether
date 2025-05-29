@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Para o contador regressivo
-
+import 'dart:async';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:provider/provider.dart'; // Importe Provider
-import 'package:myapp/auth_state_service.dart'; // Importe AuthStateService
+import 'package:provider/provider.dart';
+import 'package:myapp/auth_state_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // --- Lógica do Contador de Tempo ---
   late Timer _timer;
   final DateTime _anniversaryDate = DateTime(2025, 12, 25, 20, 0);
   Duration _timeUntilAnniversary = Duration.zero;
@@ -49,26 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
       'seconds': twoDigits(duration.inSeconds.remainder(60)),
     };
   }
-  // --- Fim da Lógica do Contador ---
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final timeComponents = _getFormattedTimeComponents(_timeUntilAnniversary);
-
-    // Acessa o AuthStateService para obter o nome de usuário real
     final authService = Provider.of<AuthStateService>(context);
-    final String welcomeUserName =
-        authService.userName ?? 'Casal'; // Se não houver nome, usa 'Casal'
+    final String welcomeUserName = authService.userName ?? 'Casal';
 
-    // --- Dados Simulados para o Progresso dos Desafios na Home ---
     final int simulatedTotalChallenges = 5;
     final int simulatedCompletedChallenges = 2;
     final double simulatedChallengeProgress =
         simulatedTotalChallenges == 0
             ? 0.0
             : simulatedCompletedChallenges / simulatedTotalChallenges;
-    // --- Fim dos Dados Simulados ---
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -168,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(width: 15),
                           Text(
-                            // MUDOU AQUI: Agora mostra o nome do usuário
                             'Olá, ${welcomeUserName}!',
                             style: const TextStyle(
                               fontSize: 28,
@@ -180,7 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 40),
-
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(
@@ -276,8 +266,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       const SizedBox(height: 40),
-
-                      // --- CARDS DE ACESSO RÁPIDO NA PARTE BRANCA ---
                       _buildInfoCard(
                         context,
                         icon: Icons.event_note,
@@ -289,7 +277,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       const SizedBox(height: 15),
-
                       _buildInfoCard(
                         context,
                         icon: Icons.emoji_events,
@@ -347,7 +334,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget auxiliar para os cards de informação na parte branca
   Widget _buildInfoCard(
     BuildContext context, {
     required IconData icon,

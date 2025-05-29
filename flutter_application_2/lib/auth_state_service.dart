@@ -1,7 +1,6 @@
-// lib/auth_state_service.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myapp/services/api_service.dart'; // <--- Caminho corrigido
+import 'package:myapp/services/api_service.dart';
 
 class AuthStateService extends ChangeNotifier {
   bool _isLoggedIn = false;
@@ -30,7 +29,12 @@ class AuthStateService extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setLoggedIn({required String token, required String id, required String username, required String email}) async {
+  Future<void> setLoggedIn({
+    required String token,
+    required String id,
+    required String username,
+    required String email,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('jwt_token', token);
     await prefs.setString('user_id', id);
