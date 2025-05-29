@@ -9,6 +9,8 @@ import Desafio from './models/Desafios.js';
 import Encontro from './models/Encontros.js';
 import AuthUser from './models/AuthUser.js';
 import SugestaoCelebracao from './models/SugestaoCelebrecao.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const port = 3000;
@@ -134,19 +136,76 @@ app.post('/encontros', async (req, res) => {
 
 
 // ROTAS AUTENTICAÇÃO
+
 app.post('/auth/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
+
+    const usuarioExistente = await AuthUser.findOne({ email });
+    if (usuarioExistente) {
+      return res.status(400).json({ message: 'Email já em uso' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const novoUsuario = new AuthUser({
       username,
       email,
-      password,
+      password: hashedPassword,
       createdAt: new Date(),
     });
+
     const salvo = await novoUsuario.save();
-    res.status(201).json(salvo);
+
+    const token = jwt.sign(
+      { id: salvo._id, email: salvo.email },
+      'seuSegredoJWT', // substitua por uma chave segura no .env
+      { expiresIn: '1d' }
+    );
+
+    res.status(201).json({
+      token,
+      user: {
+        id: salvo._id,
+        username: salvo.username,
+        email: salvo.email
+      }
+    });
   } catch (err) {
-    res.status(400).json({ erro: 'Erro ao registrar usuário', detalhes: err.message });
+    res.status(400).json({ message: 'Erro ao registrar', detalhes: err.message });
+  }
+});
+
+app.post('/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const usuario = await AuthUser.findOne({ email });
+    if (!usuario) {
+      return res.status(401).json({ message: 'Usuário não encontrado' });
+    }
+
+    const senhaCorreta = await bcrypt.compare(password, usuario.password);
+    if (!senhaCorreta) {
+      return res.status(401).json({ message: 'Senha incorreta' });
+    }
+
+    const token = jwt.sign(
+      { id: usuario._id, email: usuario.email },
+      'seuSegredoJWT', // Substitua por uma chave segura, idealmente usando .env
+      { expiresIn: '1d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: usuario._id,
+        username: usuario.username,
+        email: usuario.email
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro no login', detalhes: err.message });
   }
 });
 
@@ -179,6 +238,7 @@ app.get('/datas-importantes/:id/sugestoes', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar sugestões para esta data', detalhes: err.message });
   }
 });
+
 
 
 // Inicia o servidor
