@@ -17,7 +17,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final TextEditingController senhaController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _registerUser() async { // Renomeado para clareza
+  Future<void> _registerUser() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -32,23 +32,20 @@ class _CadastroScreenState extends State<CadastroScreen> {
         );
 
         if (response['success'] == true) {
-          // Usa o AuthStateService para atualizar o estado de login
           Provider.of<AuthStateService>(context, listen: false).setLoggedIn(
             token: response['token'],
             id: response['user']['id'],
             username: response['user']['username'],
             email: response['user']['email'],
           );
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(response['message'])),
-          );
-          // Navega para a tela principal (MainAppScreen)
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(response['message'])));
           Navigator.pushReplacementNamed(context, '/home');
         }
       } catch (e) {
-        // Exibe a mensagem de erro da API
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))), // Remove "Exception: "
+          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
         );
       } finally {
         setState(() {
@@ -61,7 +58,14 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Cadastro")),
+      appBar: AppBar(
+        title: const Text("Cadastro"),
+        backgroundColor:
+            Colors.transparent, // AppBar transparente para o degradê de fundo
+        elevation: 0, // Sem sombra
+        foregroundColor: Colors.white, // Ícones e texto brancos na AppBar
+        centerTitle: true,
+      ),
       body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -76,19 +80,39 @@ class _CadastroScreenState extends State<CadastroScreen> {
             key: _formKey,
             child: Column(
               children: [
-                Image.asset("assets/logo.png", width: 100.0),
-                Image.asset("assets/Rectangle.png", width: 70.0),
-                const SizedBox(height: 30.0),
-                const Text(
-                  "Crie sua conta", // Removido "(UI Test)"
+                // Adicionei um SizedBox para empurrar o conteúdo mais para baixo, se necessário
+                // const SizedBox(height: 50.0), // Descomente e ajuste se quiser mais espaço no topo
+                Image.asset(
+                  "assets/logo.png",
+                  width: 120.0,
+                ), // Aumentei um pouco a logo principal
+                const SizedBox(height: 10.0), // Espaçamento entre as logos
+                Image.asset(
+                  "assets/Rectangle.png",
+                  width: 80.0,
+                ), // Aumentei a largura da imagem 'Rectangle.png'
+                const SizedBox(
+                  height: 40.0,
+                ), // Aumentei o espaçamento após as logos
+
+                Text(
+                  "Crie sua conta",
                   style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    fontSize: 28, // Aumentei o tamanho da fonte para o título
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Georgia', // Adicionei uma fonte mais elegante
+                  ),
                 ),
-                const SizedBox(height: 30.0),
+                const SizedBox(
+                  height: 40.0,
+                ), // Aumentei o espaçamento antes dos campos
+
                 TextFormField(
                   controller: nomeController,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ), // Texto digitado preto
                   decoration: _inputDecoration("Nome"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -97,10 +121,13 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 25.0), // Ajustei o espaçamento
                 TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ), // Texto digitado preto
                   decoration: _inputDecoration("E-mail"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -112,10 +139,13 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 25.0), // Ajustei o espaçamento
                 TextFormField(
                   controller: senhaController,
                   obscureText: true,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ), // Texto digitado preto
                   decoration: _inputDecoration("Senha"),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -127,20 +157,39 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 30.0),
+                const SizedBox(
+                  height: 40.0,
+                ), // Aumentei o espaçamento antes do botão
+
                 _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : ElevatedButton(
-                        onPressed: _registerUser, // Chama a função real de registro
+                    : SizedBox(
+                      width: double.infinity, // Botão ocupa toda a largura
+                      child: ElevatedButton(
+                        onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 15,
+                          ), // Aumentei o padding vertical do botão
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(
+                              12,
+                            ), // Deixei as bordas um pouco mais arredondadas
                           ),
+                          elevation: 5, // Adicionei uma sombra para o botão
                         ),
-                        child: const Text("Cadastrar", style: TextStyle(color: Colors.white, fontSize: 16)), // Removido "(UI Test)"
+                        child: const Text(
+                          "Cadastrar",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ), // Aumentei fonte e peso
+                        ),
                       ),
+                    ),
+                const SizedBox(height: 20), // Espaçamento final
               ],
             ),
           ),
@@ -149,6 +198,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
     );
   }
 
+  // Função auxiliar para padronizar a decoração dos TextFields
   InputDecoration _inputDecoration(String hintText) {
     return InputDecoration(
       fillColor: const Color(0xFFFFFFFF),
@@ -157,9 +207,36 @@ class _CadastroScreenState extends State<CadastroScreen> {
       hintStyle: const TextStyle(color: Color.fromARGB(255, 102, 102, 102)),
       border: OutlineInputBorder(
         borderSide: BorderSide.none,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(
+          12,
+        ), // Bordas dos campos um pouco mais arredondadas
       ),
-      errorStyle: const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontWeight: FontWeight.bold),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Color.fromARGB(255, 255, 107, 129),
+          width: 1.5,
+        ), // Borda sutil
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Color.fromARGB(255, 160, 132, 232),
+          width: 2.0,
+        ), // Borda mais proeminente no foco
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.red, width: 2.0),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(color: Colors.redAccent, width: 2.0),
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: 18,
+        horizontal: 15,
+      ), // Aumentei o padding interno
     );
   }
 

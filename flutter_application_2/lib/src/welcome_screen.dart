@@ -41,7 +41,7 @@ class _MyWidgetState extends State<MyWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset("assets/logo.png", width: 250.0),
-              Image.asset("assets/Rectangle.png", width: 200.0),
+              Image.asset("assets/nome.png", width: 200.0),
               const SizedBox(height: 50.0),
 
               // Botão Entrar
