@@ -39,10 +39,15 @@ class SettingsScreen extends StatelessWidget {
               context,
               icon: Icons.people,
               title: 'Perfil do Casal',
-              subtitle: 'Gerencie as informações do casal, foto e data de namoro.',
+              subtitle:
+                  'Gerencie as informações do casal, foto e data de namoro.',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navegar para Perfil do Casal (em desenvolvimento)')),
+                  const SnackBar(
+                    content: Text(
+                      'Navegar para Perfil do Casal (em desenvolvimento)',
+                    ),
+                  ),
                 );
               },
             ),
@@ -55,7 +60,11 @@ class SettingsScreen extends StatelessWidget {
               subtitle: 'Configure alertas para eventos e desafios.',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navegar para Configurações de Notificações (em desenvolvimento)')),
+                  const SnackBar(
+                    content: Text(
+                      'Navegar para Configurações de Notificações (em desenvolvimento)',
+                    ),
+                  ),
                 );
               },
             ),
@@ -68,7 +77,11 @@ class SettingsScreen extends StatelessWidget {
               subtitle: 'Altere cores e visual do aplicativo.',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navegar para Tema e Aparência (em desenvolvimento)')),
+                  const SnackBar(
+                    content: Text(
+                      'Navegar para Tema e Aparência (em desenvolvimento)',
+                    ),
+                  ),
                 );
               },
             ),
@@ -81,7 +94,11 @@ class SettingsScreen extends StatelessWidget {
               subtitle: 'Tire suas dúvidas e entre em contato.',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navegar para Ajuda e Suporte (em desenvolvimento)')),
+                  const SnackBar(
+                    content: Text(
+                      'Navegar para Ajuda e Suporte (em desenvolvimento)',
+                    ),
+                  ),
                 );
               },
             ),
@@ -94,7 +111,11 @@ class SettingsScreen extends StatelessWidget {
               subtitle: 'Versão, termos de uso e política de privacidade.',
               onTap: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Navegar para Sobre o Aplicativo (em desenvolvimento)')),
+                  const SnackBar(
+                    content: Text(
+                      'Navegar para Sobre o Aplicativo (em desenvolvimento)',
+                    ),
+                  ),
                 );
               },
             ),
@@ -115,10 +136,16 @@ class SettingsScreen extends StatelessWidget {
                   );
                 },
                 icon: const Icon(Icons.logout, color: Colors.white),
-                label: const Text('Sair da Conta', style: TextStyle(color: Colors.white, fontSize: 16)),
+                label: const Text(
+                  'Sair da Conta',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red.shade700,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 15,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -131,7 +158,8 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsTile(BuildContext context, {
+  Widget _buildSettingsTile(
+    BuildContext context, {
     required IconData icon,
     required String title,
     String? subtitle,
@@ -147,7 +175,11 @@ class SettingsScreen extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              Icon(icon, size: 30, color: const Color.fromARGB(255, 160, 132, 232)),
+              Icon(
+                icon,
+                size: 30,
+                color: const Color.fromARGB(255, 160, 132, 232),
+              ),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(

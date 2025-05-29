@@ -17,13 +17,13 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   table_calendar: ^3.0.9
-  intl: ^0.20.2
+  intl: 0.20.2
   percent_indicator: ^4.2.3
   
-  # --- NOVAS DEPENDÊNCIAS PARA INTEGRAÇÃO COM BACKEND ---
+  # --- DEPENDÊNCIAS PARA INTEGRAÇÃO COM BACKEND ---
   http: ^1.2.1 # Para fazer requisições HTTP (GET, POST, PUT, DELETE)
   shared_preferences: ^2.2.3 # Para armazenar dados simples como o token JWT
-  provider: ^6.1.1 # Adicionado para o gerenciamento de estado de autenticação (AuthStateService)
+  provider: ^6.1.1 # Para o gerenciamento de estado (AuthStateService)
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +36,7 @@ flutter:
   assets:
     - assets/
     
+
   # A seção 'fonts:' deve estar COMPLETAMENTE COMENTADA ou REMOVIDA se não for usada.
   # Se você a descomentou, o erro "Mapping values are not allowed here"
   # foi causado por um pequeno erro de indentação ou um hífen extra que eu corrigi

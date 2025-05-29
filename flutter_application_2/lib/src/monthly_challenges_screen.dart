@@ -24,7 +24,12 @@ class MonthlyChallenge {
   bool get isActive {
     final now = DateTime.now();
     // Verifica se a data atual está dentro do período do desafio, incluindo o início e o fim do dia
-    return !now.isBefore(startDate) && !now.isAfter(endDate.add(const Duration(days: 1)).subtract(const Duration(milliseconds: 1)));
+    return !now.isBefore(startDate) &&
+        !now.isAfter(
+          endDate
+              .add(const Duration(days: 1))
+              .subtract(const Duration(milliseconds: 1)),
+        );
   }
 
   bool get isCompletedByBoth => completedByPartner1 && completedByPartner2;
@@ -34,12 +39,13 @@ class MonthlyChallengesScreen extends StatefulWidget {
   const MonthlyChallengesScreen({super.key});
 
   @override
-  State<MonthlyChallengesScreen> createState() => _MonthlyChallengesScreenState();
+  State<MonthlyChallengesScreen> createState() =>
+      _MonthlyChallengesScreenState();
 }
 
 class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
   // Dados mockados de desafios para a UI
-  List<MonthlyChallenge> _allChallenges = [
+  final List<MonthlyChallenge> _allChallenges = [
     MonthlyChallenge(
       id: '2025-05-challenge-1',
       title: 'Troquem presentes feito a mão',
@@ -100,7 +106,8 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
     MonthlyChallenge(
       id: '2025-06-challenge-1',
       title: 'Planejar o Futuro',
-      description: 'Conversem sobre seus sonhos e metas para os próximos 6 meses.',
+      description:
+          'Conversem sobre seus sonhos e metas para os próximos 6 meses.',
       startDate: DateTime(2025, 6, 1),
       endDate: DateTime(2025, 6, 30),
       completedByPartner1: false,
@@ -110,10 +117,15 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<MonthlyChallenge> activeChallenges = _allChallenges.where((c) => c.isActive).toList();
-    
-    final int completedCount = activeChallenges.where((c) => c.isCompletedByBoth).length;
-    final double progress = activeChallenges.isEmpty ? 0.0 : completedCount / activeChallenges.length;
+    final List<MonthlyChallenge> activeChallenges =
+        _allChallenges.where((c) => c.isActive).toList();
+
+    final int completedCount =
+        activeChallenges.where((c) => c.isCompletedByBoth).length;
+    final double progress =
+        activeChallenges.isEmpty
+            ? 0.0
+            : completedCount / activeChallenges.length;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -121,7 +133,10 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color.fromARGB(255, 255, 107, 129)),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Color.fromARGB(255, 255, 107, 129),
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -154,7 +169,10 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                 'assets/logo_small.png',
                 height: 40,
                 errorBuilder: (context, error, stackTrace) {
-                  return const Text('gether', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold));
+                  return const Text(
+                    'gether',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  );
                 },
               ),
               const SizedBox(height: 20),
@@ -172,22 +190,26 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
 
               // Lista de Desafios Ativos
               Expanded(
-                child: activeChallenges.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'Nenhum desafio ativo para este mês.',
-                          style: TextStyle(color: Colors.black54, fontSize: 16),
-                          textAlign: TextAlign.center,
+                child:
+                    activeChallenges.isEmpty
+                        ? const Center(
+                          child: Text(
+                            'Nenhum desafio ativo para este mês.',
+                            style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                        : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          itemCount: activeChallenges.length,
+                          itemBuilder: (context, index) {
+                            final challenge = activeChallenges[index];
+                            return _buildChallengeItem(challenge);
+                          },
                         ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        itemCount: activeChallenges.length,
-                        itemBuilder: (context, index) {
-                          final challenge = activeChallenges[index];
-                          return _buildChallengeItem(challenge);
-                        },
-                      ),
               ),
               const SizedBox(height: 20),
 
@@ -214,7 +236,8 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                   barRadius: const Radius.circular(25),
                   backgroundColor: Colors.grey[200]!, // Cor de fundo da barra
                   // REMOVIDO: progressColor: Colors.transparent, // <--- ESTA LINHA FOI REMOVIDA
-                  linearGradient: const LinearGradient( // MANTIDO: O gradiente que você quer
+                  linearGradient: const LinearGradient(
+                    // MANTIDO: O gradiente que você quer
                     colors: <Color>[Color(0xFFFF6B81), Color(0xFFA084E8)],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
@@ -239,10 +262,16 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
 
   // Widget auxiliar para construir cada item de desafio (o card completo)
   Widget _buildChallengeItem(MonthlyChallenge challenge) {
-    final itemBackgroundColor = challenge.isCompletedByBoth ? const Color(0xFFFF6B81).withOpacity(0.8) : Colors.white;
-    final itemTextColor = challenge.isCompletedByBoth ? Colors.white : Colors.black87;
-    final checkboxCheckColor = challenge.isCompletedByBoth ? const Color(0xFFFF6B81) : Colors.white;
-    final checkboxFillColor = challenge.isCompletedByBoth ? Colors.white : const Color(0xFFFF6B81);
+    final itemBackgroundColor =
+        challenge.isCompletedByBoth
+            ? const Color(0xFFFF6B81).withOpacity(0.8)
+            : Colors.white;
+    final itemTextColor =
+        challenge.isCompletedByBoth ? Colors.white : Colors.black87;
+    final checkboxCheckColor =
+        challenge.isCompletedByBoth ? const Color(0xFFFF6B81) : Colors.white;
+    final checkboxFillColor =
+        challenge.isCompletedByBoth ? Colors.white : const Color(0xFFFF6B81);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
@@ -269,7 +298,11 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                   challenge.completedByPartner1 = newValue ?? false;
                   challenge.completedByPartner2 = newValue ?? false;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Desafio "${challenge.title}" marcado como ${newValue == true ? "Completo" : "Pendente"} (UI Test)')),
+                    SnackBar(
+                      content: Text(
+                        'Desafio "${challenge.title}" marcado como ${newValue == true ? "Completo" : "Pendente"} (UI Test)',
+                      ),
+                    ),
                   );
                 });
               },
@@ -279,7 +312,10 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                 borderRadius: BorderRadius.circular(5),
               ),
               side: BorderSide(
-                color: challenge.isCompletedByBoth ? Colors.transparent : const Color(0xFFFF6B81),
+                color:
+                    challenge.isCompletedByBoth
+                        ? Colors.transparent
+                        : const Color(0xFFFF6B81),
                 width: 2,
               ),
             ),
@@ -290,7 +326,10 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   color: itemTextColor,
-                  decoration: challenge.isCompletedByBoth ? TextDecoration.lineThrough : TextDecoration.none,
+                  decoration:
+                      challenge.isCompletedByBoth
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
                   decorationColor: itemTextColor,
                   decorationThickness: 2,
                 ),

@@ -31,7 +31,12 @@ class AuthStateService extends ChangeNotifier {
   }
 
   // Chama esta função após login ou cadastro bem-sucedido
-  Future<void> setLoggedIn({required String token, required String id, required String username, required String email}) async {
+  Future<void> setLoggedIn({
+    required String token,
+    required String id,
+    required String username,
+    required String email,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('jwt_token', token);
     await prefs.setString('user_id', id);
@@ -48,7 +53,8 @@ class AuthStateService extends ChangeNotifier {
 
   // Chama esta função após logout
   Future<void> setLoggedOut() async {
-    final apiService = ApiService(); // Use o serviço para fazer logout (limpar SharedPreferences)
+    final apiService =
+        ApiService(); // Usa o serviço para fazer logout (limpar SharedPreferences)
     await apiService.logout();
 
     _jwtToken = null;
