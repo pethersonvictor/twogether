@@ -45,7 +45,9 @@ class DateSuggestionModel {
       // Se seu backend retorna categorias ou imagem:
       categorias:
           (json['categorias'] as List?)?.map((e) => e as String).toList(),
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl:
+          json['imageUrl']
+              as String?, // Note: usar Image.network para exibir URLs
     );
   }
 

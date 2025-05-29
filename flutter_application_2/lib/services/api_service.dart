@@ -1,34 +1,50 @@
 // lib/services/api_service.dart
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // Para usar json.encode e json.decode
+import 'package:http/http.dart' as http; // Para fazer requisições HTTP
+import 'package:shared_preferences/shared_preferences.dart'; // Para armazenar dados localmente
 
 class ApiService {
+  // ATENÇÃO: SUBSTITUA PELA URL REAL DO SEU BACKEND SE NECESSÁRIO
+  // Usando o IP fornecido: 192.168.0.4
   static const String _baseUrl =
       'http://192.168.0.4:3000'; // URL base do seu servidor Node.js
 
+  // --- MÉTODOS DE AUTENTICAÇÃO ---
+
+  /// Realiza o cadastro de um novo usuário no backend.
+  /// Retorna um Map com 'success', 'message', 'token' e 'user' em caso de sucesso.
+  /// Lança uma Exception em caso de falha.
   Future<Map<String, dynamic>> register(
     String username,
     String email,
     String password,
   ) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/auth/register'),
-      headers: {'Content-Type': 'application/json'},
+      Uri.parse('$_baseUrl/auth/register'), // Endpoint de cadastro
+      headers: {
+        'Content-Type': 'application/json',
+      }, // Define o tipo de conteúdo como JSON
       body: json.encode({
+        // Converte o Map em uma String JSON
         'username': username,
         'email': email,
         'password': password,
       }),
     );
 
+    // Verifica o status da resposta HTTP
     if (response.statusCode == 201) {
-      final responseBody = json.decode(response.body);
+      // Status 201 Created indica sucesso
+      final responseBody = json.decode(
+        response.body,
+      ); // Decodifica o corpo da resposta JSON
       final String token = responseBody['token'];
-      final String userId = responseBody['user']['id'];
+      final String userId =
+          responseBody['user']['id']; // Assume que o ID do usuário está em response.user.id
       final String userName = responseBody['user']['username'];
       final String userEmail = responseBody['user']['email'];
 
+      // Salva o token e dados do usuário no SharedPreferences para persistência
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt_token', token);
       await prefs.setString('user_id', userId);
@@ -42,6 +58,7 @@ class ApiService {
         'user': responseBody['user'],
       };
     } else {
+      // Em caso de erro, decodifica a mensagem de erro do backend
       final errorBody = json.decode(response.body);
       throw Exception(
         errorBody['message'] ?? 'Erro ao registrar usuário. Tente novamente.',
@@ -49,20 +66,26 @@ class ApiService {
     }
   }
 
+  /// Realiza o login de um usuário no backend.
+  /// Retorna um Map com 'success', 'message', 'token' e 'user' em caso de sucesso.
+  /// Lança uma Exception em caso de falha.
   Future<Map<String, dynamic>> login(String email, String password) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/auth/login'),
+      Uri.parse('$_baseUrl/auth/login'), // Endpoint de login
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'email': email, 'password': password}),
     );
 
+    // Verifica o status da resposta HTTP
     if (response.statusCode == 200) {
+      // Status 200 OK indica sucesso
       final responseBody = json.decode(response.body);
       final String token = responseBody['token'];
       final String userId = responseBody['user']['id'];
       final String userName = responseBody['user']['username'];
       final String userEmail = responseBody['user']['email'];
 
+      // Salva o token e dados do usuário no SharedPreferences para persistência
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('jwt_token', token);
       await prefs.setString('user_id', userId);
@@ -76,6 +99,7 @@ class ApiService {
         'user': responseBody['user'],
       };
     } else {
+      // Em caso de erro, decodifica a mensagem de erro do backend
       final errorBody = json.decode(response.body);
       throw Exception(
         errorBody['message'] ??
@@ -84,24 +108,29 @@ class ApiService {
     }
   }
 
+  /// Realiza o logout do usuário, limpando os dados de autenticação armazenados localmente.
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt_token');
     await prefs.remove('user_id');
     await prefs.remove('user_name');
     await prefs.remove('user_email');
+    // Se o backend tiver um endpoint de logout para invalidar o token no lado do servidor, chame-o aqui.
   }
 
+  /// Retorna o token JWT armazenado localmente, se existir.
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('jwt_token');
   }
 
+  /// Retorna o ID do usuário armazenado localmente, se existir.
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_id');
   }
 
+  /// Retorna o nome do usuário armazenado localmente, se existir.
   Future<String?> getUserName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_name');
@@ -121,20 +150,34 @@ class ApiService {
       Uri.parse('$_baseUrl$path'),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token', // Envia o token JWT no formato Bearer
       },
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body); // Pode retornar Map ou List
+      // Status 200 OK indica sucesso
+      // Se a API retornar uma lista diretamente, json.decode retorna List<dynamic>
+      // Para garantir que _get sempre retorne um Map, encapsulamos Listas.
+      final decodedBody = json.decode(response.body);
+      if (decodedBody is List) {
+        return {
+          'data': decodedBody,
+        }; // Encapsula a lista em um Map com a chave 'data'
+      }
+      return decodedBody; // Senão, retorna o Map normal
     } else {
       final errorBody = json.decode(response.body);
+      // Tenta extrair a mensagem de erro de diferentes campos (erro, message)
       throw Exception(
         errorBody['erro'] ?? errorBody['message'] ?? 'Erro ao buscar dados.',
       );
     }
   }
 
+  /// Método POST genérico para requisições que exigem autenticação.
+  /// Adiciona automaticamente o token JWT ao cabeçalho 'Authorization'.
+  /// Retorna o corpo da resposta decodificado como Map.
+  /// Lança uma Exception se não houver token ou se a requisição falhar.
   Future<Map<String, dynamic>> _post(
     String path,
     Map<String, dynamic> data,
@@ -185,7 +228,7 @@ class ApiService {
     } else {
       // Se o formato não corresponde a nenhuma das expectativas, loga e lança exceção.
       print(
-        'Erro de Tipo: Formato de dados de "datas importantes" inesperado. Resposta: $responseData',
+        'Aviso: Formato de dados de "datas importantes" inesperado. Resposta: $responseData',
       );
       throw Exception(
         'Formato de dados de datas importantes inesperado do servidor. Esperava uma lista ou um objeto com a chave "data" contendo uma lista.',
@@ -201,6 +244,41 @@ class ApiService {
     Map<String, dynamic> dateData,
   ) async {
     final response = await _post('/datas-importantes', dateData);
+    return response;
+  }
+
+  /// Busca as sugestões de encontros do backend.
+  /// Retorna uma Future<List<dynamic>> contendo as sugestões.
+  /// Lança uma Exception se a requisição falhar ou o formato da resposta for inesperado.
+  Future<List<dynamic>> fetchDateSuggestions() async {
+    final dynamic responseData = await _get(
+      '/sugestoes',
+    ); // Endpoint do backend
+
+    // Assumimos que a resposta é uma lista diretamente ou um Map com a lista em 'data'.
+    if (responseData is List) {
+      return responseData;
+    } else if (responseData is Map<String, dynamic> &&
+        responseData.containsKey('data') &&
+        responseData['data'] is List) {
+      return responseData['data'] as List<dynamic>;
+    } else {
+      print(
+        'Aviso: Formato de dados de "sugestões de encontros" inesperado. Resposta: $responseData',
+      );
+      throw Exception(
+        'Formato de dados de sugestões de encontros inesperado do servidor. Esperava uma lista ou um objeto com a chave "data" contendo uma lista.',
+      );
+    }
+  }
+
+  /// Adiciona uma nova sugestão de encontro ao backend.
+  /// `suggestionData` deve ser um Map contendo os dados da sugestão.
+  /// Retorna um Map com a resposta do servidor em caso de sucesso.
+  Future<Map<String, dynamic>> addDateSuggestionApi(
+    Map<String, dynamic> suggestionData,
+  ) async {
+    final response = await _post('/sugestoes', suggestionData);
     return response;
   }
 }
