@@ -1,17 +1,25 @@
+// lib/src/settings_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Import Provider
+import 'package:myapp/auth_state_service.dart'; // Import AuthStateService
+import 'package:myapp/services/api_service.dart'; // Import ApiService para logout
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Acessa o AuthStateService para realizar o logout
+    final authService = Provider.of<AuthStateService>(context, listen: false);
+    final apiService = ApiService(); // Instância do ApiService
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Configurações'),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 160, 132, 232), // Uma cor do seu degradê
+        backgroundColor: const Color.fromARGB(255, 160, 132, 232),
         foregroundColor: Colors.white,
-        leading: IconButton( // Botão de voltar personalizado
+        leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
@@ -27,7 +35,6 @@ class SettingsScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            // Opção 1: Perfil do Casal
             _buildSettingsTile(
               context,
               icon: Icons.people,
@@ -37,12 +44,10 @@ class SettingsScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Navegar para Perfil do Casal (em desenvolvimento)')),
                 );
-                // FUTURO: Navigator.pushNamed(context, '/couple_profile');
               },
             ),
             const SizedBox(height: 10),
 
-            // Opção 2: Notificações
             _buildSettingsTile(
               context,
               icon: Icons.notifications,
@@ -52,12 +57,10 @@ class SettingsScreen extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Navegar para Configurações de Notificações (em desenvolvimento)')),
                 );
-                // FUTURO: Navigator.pushNamed(context, '/notification_settings');
               },
             ),
             const SizedBox(height: 10),
 
-            // Opção 3: Tema e Aparência
             _buildSettingsTile(
               context,
               icon: Icons.color_lens,
@@ -71,7 +74,6 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Opção 4: Ajuda e Suporte
             _buildSettingsTile(
               context,
               icon: Icons.help_outline,
@@ -85,7 +87,6 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Opção 5: Sobre o Aplicativo
             _buildSettingsTile(
               context,
               icon: Icons.info_outline,
@@ -99,21 +100,24 @@ class SettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Botão de Logout (destacado)
             Align(
               alignment: Alignment.center,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // Simula o logout
-                  Navigator.pushReplacementNamed(context, '/welcome');
+                onPressed: () async {
+                  // Realiza o logout no serviço de API (limpa o token local)
+                  await apiService.logout();
+                  // Notifica o AuthStateService que o usuário não está mais logado
+                  authService.setLoggedOut();
+                  // O main.dart (via Consumer) redirecionará para /welcome
+                  // Não precisa de Navigator.pushReplacementNamed aqui porque o Consumer em main.dart já reagirá
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Logout UI simulado!')),
+                    const SnackBar(content: Text('Logout realizado!')),
                   );
                 },
                 icon: const Icon(Icons.logout, color: Colors.white),
                 label: const Text('Sair da Conta', style: TextStyle(color: Colors.white, fontSize: 16)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red.shade700, // Cor de destaque para logout
+                  backgroundColor: Colors.red.shade700,
                   padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -127,7 +131,6 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  // Widget auxiliar para os itens de configuração
   Widget _buildSettingsTile(BuildContext context, {
     required IconData icon,
     required String title,
@@ -137,14 +140,14 @@ class SettingsScreen extends StatelessWidget {
     return Card(
       elevation: 3,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      child: InkWell( // Torna o card clicável
+      child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(15),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              Icon(icon, size: 30, color: const Color.fromARGB(255, 160, 132, 232)), // Cor roxa do degradê
+              Icon(icon, size: 30, color: const Color.fromARGB(255, 160, 132, 232)),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(

@@ -17,7 +17,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   table_calendar: ^3.0.9
-  intl: ^0.19.0
+  intl: ^0.20.2
   percent_indicator: ^4.2.3
   
   # --- NOVAS DEPENDÊNCIAS PARA INTEGRAÇÃO COM BACKEND ---
