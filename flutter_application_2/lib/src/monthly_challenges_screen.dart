@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
+// Modelo simples para um Desafio Mensal
 class MonthlyChallenge {
   final String id;
   final String title;
@@ -42,6 +43,7 @@ class MonthlyChallengesScreen extends StatefulWidget {
 }
 
 class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
+  // Dados mockados de desafios para a UI
   List<MonthlyChallenge> _allChallenges = [
     MonthlyChallenge(
       id: '2025-05-challenge-1',
@@ -56,36 +58,48 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
       title: '30 minutos sem redes sociais',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-05-challenge-3',
       title: 'Patinete da Orla de AJU',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-05-challenge-4',
       title: 'Troquem cartas de amor',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-05-challenge-5',
       title: 'Surpreenda com uma comida favorita',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-05-challenge-6',
       title: 'Faça uma caminhada juntos',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-05-challenge-7',
-      title: 'Piquenique',
+      title: 'piquenique',
       startDate: DateTime(2025, 5, 1),
       endDate: DateTime(2025, 5, 31),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
     MonthlyChallenge(
       id: '2025-06-challenge-1',
@@ -94,6 +108,8 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
           'Conversem sobre seus sonhos e metas para os próximos 6 meses.',
       startDate: DateTime(2025, 6, 1),
       endDate: DateTime(2025, 6, 30),
+      completedByPartner1: false,
+      completedByPartner2: false,
     ),
   ];
 
@@ -101,6 +117,7 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
   Widget build(BuildContext context) {
     final List<MonthlyChallenge> activeChallenges =
         _allChallenges.where((c) => c.isActive).toList();
+
     final int completedCount =
         activeChallenges.where((c) => c.isCompletedByBoth).length;
     final double progress =
@@ -168,6 +185,11 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                 ),
               ),
               const SizedBox(height: 30),
+
+              if (activeChallenges.isNotEmpty)
+                _buildProgressPath(activeChallenges),
+              const SizedBox(height: 20),
+
               Expanded(
                 child:
                     activeChallenges.isEmpty
@@ -191,6 +213,7 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
                         ),
               ),
               const SizedBox(height: 20),
+
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 padding: const EdgeInsets.all(10.0),
@@ -235,6 +258,90 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
     );
   }
 
+  Widget _buildProgressPath(List<MonthlyChallenge> challenges) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(challenges.length, (index) {
+          final challenge = challenges[index];
+          final isCompleted = challenge.isCompletedByBoth;
+          final isCurrent = challenge.isActive;
+
+          return Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        isCompleted
+                            ? const Color.fromARGB(255, 255, 107, 129)
+                            : Colors.grey[300],
+                    border:
+                        isCurrent && !isCompleted
+                            ? Border.all(color: Colors.blueAccent, width: 2)
+                            : null,
+                  ),
+                  child: Center(
+                    child:
+                        isCompleted
+                            ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 20,
+                            )
+                            : Text(
+                              '${index + 1}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  _getShortTitle(challenge.title),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: isCompleted ? Colors.black87 : Colors.grey,
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (index < challenges.length - 1)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 2,
+                      color:
+                          isCompleted && challenges[index + 1].isCompletedByBoth
+                              ? const Color.fromARGB(255, 255, 107, 129)
+                              : Colors.grey[300],
+                    ),
+                  ),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+
+  String _getShortTitle(String title) {
+    List<String> words = title.split(' ');
+    if (words.length > 3) {
+      return '${words.sublist(0, 3).join(' ')}...';
+    }
+    return title;
+  }
+
   Widget _buildChallengeItem(MonthlyChallenge challenge) {
     final itemBackgroundColor =
         challenge.isCompletedByBoth
@@ -262,7 +369,7 @@ class _MonthlyChallengesScreenState extends State<MonthlyChallengesScreen> {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
             Checkbox(

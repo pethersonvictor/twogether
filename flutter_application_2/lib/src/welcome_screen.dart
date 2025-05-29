@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/auth_state_service.dart';
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -25,8 +27,9 @@ class _MyWidgetState extends State<MyWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset("assets/logo.png", width: 250.0),
-              Image.asset("assets/nome.png", width: 200.0),
+              Image.asset("assets/Rectangle.png", width: 200.0),
               const SizedBox(height: 50.0),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -46,7 +49,9 @@ class _MyWidgetState extends State<MyWidget> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 15.0),
+
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

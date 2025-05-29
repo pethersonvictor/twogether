@@ -1,16 +1,15 @@
 // lib/models/date_suggestion.dart
+// Este modelo será usado apenas para a estrutura dos dados MOCKADOS na tela de sugestões.
+// Se você for integrar com o backend para sugestões no futuro, o fromJson/toJson
+// precisaria corresponder à API real de sugestões do seu backend.
 class DateSuggestionModel {
-  // Renomeado para evitar conflito com a classe DateSuggestion da tela
   final String id;
-  final String
-  titulo; // Assumindo que seu backend usa 'titulo' para o nome da sugestão
-  final String? descricao; // Assumindo 'descricao' para a descrição
-  final String? dataImportanteId; // Se estiver vinculada a uma data importante
-  final String? usuarioId; // Se a sugestão for criada por um usuário
-
-  // Campos adicionais que você pode ter no backend para sugestões:
-  final List<String>? categorias; // Ex: ['Romântico', 'Ao Ar Livre']
-  final String? imageUrl; // URL de uma imagem para a sugestão
+  final String titulo;
+  final String? descricao;
+  final String? dataImportanteId;
+  final String? usuarioId;
+  final List<String>? categorias;
+  final String? imageUrl; // Agora esperando um asset local
 
   DateSuggestionModel({
     required this.id,
@@ -22,7 +21,8 @@ class DateSuggestionModel {
     this.imageUrl,
   });
 
-  // Factory constructor para criar uma instância de DateSuggestionModel a partir de um JSON (Map)
+  // Este fromJson é baseado em como o backend retornaria, mas não será usado diretamente
+  // na tela de sugestões AGORA, já que os dados serão mockados.
   factory DateSuggestionModel.fromJson(Map<String, dynamic> json) {
     return DateSuggestionModel(
       id: json['_id'] as String,
@@ -42,16 +42,13 @@ class DateSuggestionModel {
                       : json['usuario_id'])
                   as String?
               : null,
-      // Se seu backend retorna categorias ou imagem:
       categorias:
           (json['categorias'] as List?)?.map((e) => e as String).toList(),
       imageUrl:
-          json['imageUrl']
-              as String?, // Note: usar Image.network para exibir URLs
+          json['imageUrl'] as String?, // Ainda espera URL se vier do backend
     );
   }
 
-  // Método para converter para JSON (útil para POST/PUT se o app permitir criar/editar)
   Map<String, dynamic> toJson() {
     return {
       '_id': id,

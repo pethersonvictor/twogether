@@ -57,6 +57,7 @@ class _EntrarScreenState extends State<EntrarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: DecoratedBox(
+        // Aplicar o degradê ao body completo
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: <Color>[Color(0xFFFF6B81), Color(0xFFA084E8)],
@@ -67,6 +68,7 @@ class _EntrarScreenState extends State<EntrarScreen> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
+            // Usando Column para organizar o conteúdo
             children: [
               Align(
                 alignment: Alignment.centerLeft,
@@ -81,10 +83,15 @@ class _EntrarScreenState extends State<EntrarScreen> {
                 ),
               ),
               const SizedBox(height: 20.0),
+
               Image.asset("assets/logo.png", width: 120.0),
               const SizedBox(height: 10.0),
-              Image.asset("assets/nome.png", width: 80.0),
+              Image.asset(
+                "assets/nome.png",
+                width: 80.0,
+              ), // <-- ALTERADO PARA 'nome.png'
               const SizedBox(height: 40.0),
+
               Text(
                 "Acessar conta",
                 style: TextStyle(
@@ -95,6 +102,7 @@ class _EntrarScreenState extends State<EntrarScreen> {
                 ),
               ),
               const SizedBox(height: 40.0),
+
               Form(
                 key: _formKey,
                 child: Column(
@@ -128,6 +136,7 @@ class _EntrarScreenState extends State<EntrarScreen> {
                       },
                     ),
                     const SizedBox(height: 40.0),
+
                     _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : SizedBox(

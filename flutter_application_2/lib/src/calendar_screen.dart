@@ -1,3 +1,4 @@
+// lib/src/calendar_screen.dart
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:myapp/src/add_special_date_screen.dart';
@@ -25,10 +26,21 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void initState() {
     super.initState();
     _selectedDay = _focusedDay;
+    debugPrint('CalendarScreen: initState - Carregando datas...'); // DEBUG
     _loadImportantDates();
   }
 
+  // Método para carregar as datas importantes do backend
   Future<void> _loadImportantDates() async {
+    debugPrint('CalendarScreen: _loadImportantDates chamado.'); // DEBUG
+    if (!mounted) {
+      // Verifica se o widget ainda está ativo
+      debugPrint(
+        'CalendarScreen: _loadImportantDates chamado, mas widget não está montado.',
+      ); // DEBUG
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -38,18 +50,27 @@ class _CalendarScreenState extends State<CalendarScreen> {
       final currentUserId = authService.userId;
 
       if (currentUserId == null) {
+        debugPrint(
+          'CalendarScreen: Usuário não autenticado no _loadImportantDates.',
+        ); // DEBUG
         throw Exception(
           'Usuário não autenticado. Redirecionando para o login.',
         );
       }
 
       final List<dynamic> rawDates = await apiService.fetchImportantDates();
+      debugPrint(
+        'CalendarScreen: Datas recebidas do backend: ${rawDates.length} itens.',
+      ); // DEBUG
 
       List<ImportantDate> userDates =
           rawDates
               .map((json) => ImportantDate.fromJson(json))
               .where((date) => date.usuarioId == currentUserId)
               .toList();
+      debugPrint(
+        'CalendarScreen: Datas filtradas para o usuário: ${userDates.length} itens.',
+      ); // DEBUG
 
       _events.clear();
       for (var date in userDates) {
@@ -61,9 +82,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
         _events.putIfAbsent(day, () => []);
         _events[day]!.add(date);
       }
+      debugPrint(
+        'CalendarScreen: Mapa _events populado com ${_events.length} dias com eventos.',
+      ); // DEBUG
 
       _selectedEvents = _getEventsForDay(_selectedDay ?? DateTime.now());
+      debugPrint(
+        'CalendarScreen: Eventos para o dia selecionado: ${_selectedEvents.length} itens.',
+      ); // DEBUG
     } catch (e) {
+      debugPrint('CalendarScreen: ERRO no _loadImportantDates: $e'); // DEBUG
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -76,9 +104,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
         Navigator.pushReplacementNamed(context, '/welcome');
       }
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        // Só chama setState se o widget ainda estiver montado
+        setState(() {
+          _isLoading = false;
+        });
+        debugPrint('CalendarScreen: _isLoading definido como false.'); // DEBUG
+      }
     }
   }
 
@@ -88,6 +120,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(
+      'CalendarScreen: build chamado. _isLoading: $_isLoading',
+    ); // DEBUG
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendário'),
@@ -121,9 +156,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           _focusedDay = focusedDay;
                           _selectedEvents = _getEventsForDay(selectedDay);
                         });
+                        debugPrint(
+                          'CalendarScreen: Dia selecionado: $selectedDay',
+                        ); // DEBUG
                       },
                       onPageChanged: (focusedDay) {
                         _focusedDay = focusedDay;
+                        debugPrint(
+                          'CalendarScreen: Mês/Ano alterado para: $focusedDay',
+                        ); // DEBUG
                       },
                       calendarStyle: const CalendarStyle(
                         todayDecoration: BoxDecoration(
@@ -195,13 +236,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
               ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.push(
+          debugPrint(
+            'CalendarScreen: Botão "Adicionar Data" pressionado.',
+          ); // DEBUG
+          // Navega para a tela de adicionar data especial e aguarda o resultado
+          final result = await Navigator.push(
+            // Captura o resultado
             context,
             MaterialPageRoute(
               builder: (context) => const AddSpecialDateScreen(),
             ),
           );
-          _loadImportantDates();
+          debugPrint(
+            'CalendarScreen: Retornou de AddSpecialDateScreen com resultado: $result',
+          ); // DEBUG
+
+          // Se a data foi salva com sucesso, recarrega as datas
+          if (result == true) {
+            _loadImportantDates();
+            // Também aciona o recarregamento na HomeScreen
+            // Isso pode ser feito via Provider, mas para UI Test, podemos simplificar
+            // Se a HomeScreen também precisar ser atualizada, a forma mais robusta é
+            // usar um listener no AuthStateService ou um método de callback se ela for pai.
+          }
         },
         backgroundColor: const Color.fromARGB(255, 255, 107, 129),
         child: const Icon(Icons.add, color: Colors.white),

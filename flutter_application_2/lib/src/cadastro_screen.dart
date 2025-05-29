@@ -58,13 +58,6 @@ class _CadastroScreenState extends State<CadastroScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Cadastro"),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.white,
-        centerTitle: true,
-      ),
       body: DecoratedBox(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -75,95 +68,119 @@ class _CadastroScreenState extends State<CadastroScreen> {
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                Image.asset("assets/logo.png", width: 120.0),
-                const SizedBox(height: 10.0),
-                Image.asset("assets/nome.png", width: 80.0),
-                const SizedBox(height: 40.0),
-                Text(
-                  "Crie sua conta",
-                  style: TextStyle(
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Georgia',
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
                   ),
-                ),
-                const SizedBox(height: 40.0),
-                TextFormField(
-                  controller: nomeController,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: _inputDecoration("Nome"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira seu nome.';
-                    }
-                    return null;
+                  onPressed: () {
+                    Navigator.pop(context);
                   },
                 ),
-                const SizedBox(height: 25.0),
-                TextFormField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: _inputDecoration("E-mail"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira seu e-mail.';
-                    }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Por favor, insira um e-mail válido.';
-                    }
-                    return null;
-                  },
+              ),
+              const SizedBox(height: 20.0),
+
+              Image.asset("assets/logo.png", width: 120.0),
+              const SizedBox(height: 10.0),
+              Image.asset(
+                "assets/nome.png",
+                width: 80.0,
+              ), // <-- ALTERADO PARA 'nome.png'
+              const SizedBox(height: 40.0),
+
+              Text(
+                "Crie sua conta",
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Georgia',
                 ),
-                const SizedBox(height: 25.0),
-                TextFormField(
-                  controller: senhaController,
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.black),
-                  decoration: _inputDecoration("Senha"),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira sua senha.';
-                    }
-                    if (value.length < 6) {
-                      return 'A senha deve ter pelo menos 6 caracteres.';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 40.0),
-                _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: _registerUser,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 5,
-                        ),
-                        child: const Text(
-                          "Cadastrar",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
+              ),
+              const SizedBox(height: 40.0),
+
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: nomeController,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("Nome"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira seu nome.';
+                        }
+                        return null;
+                      },
                     ),
-                const SizedBox(height: 20),
-              ],
-            ),
+                    const SizedBox(height: 25.0),
+                    TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("E-mail"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira seu e-mail.';
+                        }
+                        if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                          return 'Por favor, insira um e-mail válido.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 25.0),
+                    TextFormField(
+                      controller: senhaController,
+                      obscureText: true,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: _inputDecoration("Senha"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira sua senha.';
+                        }
+                        if (value.length < 6) {
+                          return 'A senha deve ter pelo menos 6 caracteres.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 40.0),
+
+                    _isLoading
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _registerUser,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(vertical: 15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 5,
+                            ),
+                            child: const Text(
+                              "Cadastrar",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

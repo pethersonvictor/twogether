@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:provider/provider.dart';
+import 'package:myapp/auth_state_service.dart';
+import 'package:myapp/services/api_service.dart';
+
 class AddSpecialDateScreen extends StatefulWidget {
   const AddSpecialDateScreen({super.key});
 
@@ -16,6 +20,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
   final TextEditingController _momentController = TextEditingController();
 
   DateTime? _selectedDate;
+  bool _isLoading = false;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -46,23 +51,72 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
     }
   }
 
-  void _saveSpecialDate() {
+  void _saveSpecialDate() async {
     if (_formKey.currentState!.validate()) {
-      final String name = _nameController.text;
-      final String date = _dateController.text;
-      final String location = _locationController.text;
-      final String moment = _momentController.text;
+      if (_selectedDate == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Por favor, selecione a data.')),
+        );
+        return;
+      }
 
-      debugPrint('Nome: $name');
-      debugPrint('Data: $date (DateTime: $_selectedDate)');
-      debugPrint('Local: $location');
-      debugPrint('Momento: $moment');
+      setState(() {
+        _isLoading = true;
+      });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data especial salva (UI Test)!')),
-      );
+      try {
+        final authService = Provider.of<AuthStateService>(
+          context,
+          listen: false,
+        );
+        final userId = authService.userId;
 
-      Navigator.pop(context);
+        if (userId == null) {
+          throw Exception(
+            'Usuário não autenticado. Redirecionando para o login.',
+          );
+        }
+
+        final apiService = ApiService();
+        final Map<String, dynamic> dateData = {
+          'titulo': _nameController.text.trim(),
+          'data_evento': _selectedDate!.toIso8601String(),
+          'local': _locationController.text.trim(),
+          'momento': _momentController.text.trim(),
+          'usuario_id': userId,
+        };
+
+        final response = await apiService.addImportantDateApi(dateData);
+
+        if (response['_id'] != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Data especial salva com sucesso!')),
+          );
+          // Sinaliza para a tela anterior (CalendarScreen) que ela deve atualizar
+          Navigator.pop(context, true);
+        } else {
+          throw Exception(
+            response['message'] ??
+                'Resposta inesperada do servidor ao salvar data.',
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erro ao salvar data: ${e.toString().replaceFirst('Exception: ', '')}',
+            ),
+          ),
+        );
+        if (e.toString().contains('Não autenticado')) {
+          Provider.of<AuthStateService>(context, listen: false).setLoggedOut();
+          Navigator.pushReplacementNamed(context, '/welcome');
+        }
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -104,7 +158,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
             child: Opacity(
               opacity: 0.1,
               child: Image.asset(
-                'assets/hearts_pattern.png',
+                'assets/coraçoes.png',
                 repeat: ImageRepeat.repeat,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
@@ -146,6 +200,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                   const SizedBox(height: 10),
                   const Icon(Icons.edit_note, size: 80, color: Colors.grey),
                   const SizedBox(height: 30),
+
                   _buildTextInput(
                     controller: _nameController,
                     hintText: 'ex: aniversário de namoro, casamento, noivado',
@@ -158,6 +213,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
+
                   _buildTextInput(
                     controller: _dateController,
                     hintText: 'dd/mm/aaaa',
@@ -168,16 +224,21 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, selecione a data.';
                       }
+                      if (_selectedDate == null) {
+                        return 'Por favor, selecione a data.';
+                      }
                       return null;
                     },
                   ),
                   const SizedBox(height: 20),
+
                   _buildTextInput(
                     controller: _locationController,
                     hintText: 'Ex: Restaurante X, Praia, Cidade Y, Em casa...',
                     labelText: 'Onde essa data especial aconteceu?',
                   ),
                   const SizedBox(height: 20),
+
                   _buildTextInput(
                     controller: _momentController,
                     hintText: '',
@@ -185,23 +246,26 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                     maxLines: 3,
                   ),
                   const SizedBox(height: 40),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _saveSpecialDate,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+
+                  _isLoading
+                      ? const CircularProgressIndicator(color: Colors.black)
+                      : SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _saveSpecialDate,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            'Salvar',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
                         ),
                       ),
-                      child: const Text(
-                        'Salvar',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ),
                   const SizedBox(height: 20),
                 ],
               ),

@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:myapp/auth_state_service.dart';
+
+// Importa todas as suas telas
 import 'package:myapp/src/welcome_screen.dart';
 import 'package:myapp/src/cadastro_screen.dart';
 import 'package:myapp/src/entrar_screen.dart';
 import 'package:myapp/src/calendar_screen.dart';
+import 'package:myapp/src/home_screen.dart';
 import 'package:myapp/src/date_suggestions_screen.dart';
 import 'package:myapp/src/monthly_challenges_screen.dart';
 import 'package:myapp/src/main_app_screen.dart';

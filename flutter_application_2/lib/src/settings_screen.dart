@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:myapp/auth_state_service.dart';
+import 'package:myapp/services/api_service.dart';
+import 'package:myapp/src/welcome_screen.dart'; // <--- ADICIONE ESTA LINHA!
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthStateService>(context, listen: false);
+    final apiService = ApiService();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Configurações'),
@@ -44,6 +51,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
+
             _buildSettingsTile(
               context,
               icon: Icons.notifications,
@@ -60,6 +68,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
+
             _buildSettingsTile(
               context,
               icon: Icons.color_lens,
@@ -76,6 +85,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
+
             _buildSettingsTile(
               context,
               icon: Icons.help_outline,
@@ -92,6 +102,7 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 10),
+
             _buildSettingsTile(
               context,
               icon: Icons.info_outline,
@@ -108,13 +119,24 @@ class SettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
+
             Align(
               alignment: Alignment.center,
               child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/welcome');
+                onPressed: () async {
+                  await apiService.logout();
+                  authService.setLoggedOut();
+                  // Redireciona para a tela de boas-vindas, removendo todas as rotas anteriores
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyWidget(),
+                    ), // <--- MyWidget agora será reconhecido
+                    (Route<dynamic> route) => false,
+                  );
+
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Logout UI simulado!')),
+                    const SnackBar(content: Text('Logout realizado!')),
                   );
                 },
                 icon: const Icon(Icons.logout, color: Colors.white),
