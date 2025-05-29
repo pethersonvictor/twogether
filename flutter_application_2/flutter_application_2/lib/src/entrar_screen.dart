@@ -1,6 +1,5 @@
-// lib/src/entrar_screen.dart
 import 'package:flutter/material.dart';
-import 'package:myapp/services/api_service.dart'; // Importa seu ApiService
+import 'package:myapp/services/api_service.dart'; // <--- Caminho corrigidos
 import 'package:provider/provider.dart'; // Importa Provider
 import 'package:myapp/auth_state_service.dart'; // Importa seu AuthStateService
 

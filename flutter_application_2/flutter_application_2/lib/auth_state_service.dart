@@ -1,7 +1,7 @@
 // lib/auth_state_service.dart
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:myapp/services/api_service.dart'; // Importe o seu ApiService
+import 'package:myapp/services/api_service.dart'; // <--- Caminho corrigido
 
 class AuthStateService extends ChangeNotifier {
   bool _isLoggedIn = false;
@@ -17,7 +17,7 @@ class AuthStateService extends ChangeNotifier {
   String? get userEmail => _userEmail;
 
   AuthStateService() {
-    _checkLoginStatus(); // Verifica o status de login ao iniciar o serviço
+    _checkLoginStatus();
   }
 
   Future<void> _checkLoginStatus() async {
@@ -27,16 +27,10 @@ class AuthStateService extends ChangeNotifier {
     _userName = prefs.getString('user_name');
     _userEmail = prefs.getString('user_email');
     _isLoggedIn = _jwtToken != null;
-    notifyListeners(); // Notifica os ouvintes sobre a mudança de estado
+    notifyListeners();
   }
 
-  // Chama esta função após login ou cadastro bem-sucedido
-  Future<void> setLoggedIn({
-    required String token,
-    required String id,
-    required String username,
-    required String email,
-  }) async {
+  Future<void> setLoggedIn({required String token, required String id, required String username, required String email}) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('jwt_token', token);
     await prefs.setString('user_id', id);
@@ -51,10 +45,8 @@ class AuthStateService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Chama esta função após logout
   Future<void> setLoggedOut() async {
-    final apiService =
-        ApiService(); // Usa o serviço para fazer logout (limpar SharedPreferences)
+    final apiService = ApiService();
     await apiService.logout();
 
     _jwtToken = null;

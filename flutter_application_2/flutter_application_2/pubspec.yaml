@@ -17,7 +17,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   table_calendar: ^3.0.9
-  intl: 0.20.2
+  intl: ^0.19.0
   percent_indicator: ^4.2.3
   
   # --- DEPENDÊNCIAS PARA INTEGRAÇÃO COM BACKEND ---
@@ -35,8 +35,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    
-
+ 
   # A seção 'fonts:' deve estar COMPLETAMENTE COMENTADA ou REMOVIDA se não for usada.
   # Se você a descomentou, o erro "Mapping values are not allowed here"
   # foi causado por um pequeno erro de indentação ou um hífen extra que eu corrigi

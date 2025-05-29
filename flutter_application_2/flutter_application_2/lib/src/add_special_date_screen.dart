@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Para formatar a data (dd/MM/yyyy)
-import 'package:myapp/src/settings_screen.dart'; // Para navegar para a tela de configurações
+
 
 class AddSpecialDateScreen extends StatefulWidget {
   const AddSpecialDateScreen({super.key});
@@ -10,11 +10,9 @@ class AddSpecialDateScreen extends StatefulWidget {
 }
 
 class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
-  final GlobalKey<FormState> _formKey =
-      GlobalKey<FormState>(); // Chave para o formulário
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>(); // Chave para o formulário
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _dateController =
-      TextEditingController(); // Para exibir a data selecionada
+  final TextEditingController _dateController = TextEditingController(); // Para exibir a data selecionada
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _momentController = TextEditingController();
 
@@ -37,9 +35,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
               onPrimary: Colors.white, // Cor do texto sobre a cor primária
               onSurface: Colors.black87, // Cor do texto no calendário
             ),
-            dialogTheme: DialogThemeData(
-              backgroundColor: Colors.white,
-            ), // Fundo do diálogo
+            dialogBackgroundColor: Colors.white, // Fundo do diálogo
           ),
           child: child!,
         );
@@ -48,17 +44,14 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked; // Armazena a data selecionada
-        _dateController.text = DateFormat(
-          'dd/MM/yyyy',
-        ).format(picked); // Atualiza o campo de texto formatado
+        _dateController.text = DateFormat('dd/MM/yyyy').format(picked); // Atualiza o campo de texto formatado
       });
     }
   }
 
   // Função para simular o salvamento da data especial
   void _saveSpecialDate() {
-    if (_formKey.currentState!.validate()) {
-      // Valida o formulário
+    if (_formKey.currentState!.validate()) { // Valida o formulário
       // Captura os dados dos controladores
       final String name = _nameController.text;
       final String date = _dateController.text;
@@ -98,34 +91,23 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Fundo branco
-      appBar: AppBar(
-        // AppBar personalizada, como na imagem
-        backgroundColor:
-            Colors.transparent, // Transparente para ver o padrão de fundo
+      appBar: AppBar( // AppBar personalizada, como na imagem
+        backgroundColor: Colors.transparent, // Transparente para ver o padrão de fundo
         elevation: 0, // Sem sombra
-        leading: IconButton(
-          // Botão de voltar personalizado
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Color.fromARGB(255, 255, 107, 129),
-          ), // Cor rosa do degradê
+        leading: IconButton( // Botão de voltar personalizado
+          icon: const Icon(Icons.arrow_back_ios_new, color: Color.fromARGB(255, 255, 107, 129)), // Cor rosa do degradê
           onPressed: () => Navigator.pop(context), // Volta para a tela anterior
         ),
-        actions: [
-          // Ícone de configurações
+        actions: [ // Ícone de configurações
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.black), // Cor preta
             onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/settings',
-              ); // Navega para a tela de configurações
+              Navigator.pushNamed(context, '/settings'); // Navega para a tela de configurações
             },
           ),
         ],
       ),
-      body: Stack(
-        // Usa Stack para o padrão de corações no fundo
+      body: Stack( // Usa Stack para o padrão de corações no fundo
         children: [
           // Padrão de Corações
           Positioned.fill(
@@ -141,32 +123,21 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            // Permite rolagem do conteúdo
+          SingleChildScrollView( // Permite rolagem do conteúdo
             padding: const EdgeInsets.all(20.0),
-            child: Form(
-              // Agrupa os campos para validação
+            child: Form( // Agrupa os campos para validação
               key: _formKey, // Associa a chave
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.center, // Centraliza alguns elementos
+                crossAxisAlignment: CrossAxisAlignment.center, // Centraliza alguns elementos
                 children: [
                   Image.asset(
                     "assets/logo_cor.png", // LOGO COLORIDA ADICIONADA AQUI (nome do arquivo atualizado)
                     height: 80, // Ajuste a altura conforme necessário
                     errorBuilder: (context, error, stackTrace) {
-                      return const Text(
-                        'gether',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
+                      return const Text('gether', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold));
                     },
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ), // Espaçamento entre a logo e o título
+                  const SizedBox(height: 20), // Espaçamento entre a logo e o título
                   const Text(
                     'Salvar data especial',
                     style: TextStyle(
@@ -177,11 +148,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
-                  const Icon(
-                    Icons.edit_note,
-                    size: 80,
-                    color: Colors.grey,
-                  ), // Ícone de lápis/bloco
+                  const Icon(Icons.edit_note, size: 80, color: Colors.grey), // Ícone de lápis/bloco
                   const SizedBox(height: 30),
 
                   // Campo 1: Nome da Data
@@ -204,9 +171,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                     hintText: 'dd/mm/aaaa',
                     labelText: 'Quando foi essa data tão especial?',
                     readOnly: true, // Impede digitação direta
-                    onTap:
-                        () =>
-                            _selectDate(context), // Abre o DatePicker ao tocar
+                    onTap: () => _selectDate(context), // Abre o DatePicker ao tocar
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, selecione a data.';
@@ -237,8 +202,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed:
-                          _saveSpecialDate, // Chama a função de salvamento simulado
+                      onPressed: _saveSpecialDate, // Chama a função de salvamento simulado
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black, // Cor do botão
                         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -246,10 +210,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                      child: const Text(
-                        'Salvar',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                      child: const Text('Salvar', style: TextStyle(color: Colors.white, fontSize: 18)),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -273,8 +234,7 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
     int maxLines = 1,
   }) {
     return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start, // Alinha o labelText à esquerda
+      crossAxisAlignment: CrossAxisAlignment.start, // Alinha o labelText à esquerda
       children: [
         Text(
           labelText,
@@ -295,41 +255,27 @@ class _AddSpecialDateScreenState extends State<AddSpecialDateScreen> {
             hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
             filled: true,
             fillColor: Colors.white, // Fundo branco do campo
-            border: OutlineInputBorder(
-              // Borda padrão (sem cor)
+            border: OutlineInputBorder( // Borda padrão (sem cor)
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide.none,
             ),
-            enabledBorder: OutlineInputBorder(
-              // Borda para estado normal (não focado)
+            enabledBorder: OutlineInputBorder( // Borda para estado normal (não focado)
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 255, 107, 129),
-                width: 2,
-              ), // Cor rosa do degradê
+              borderSide: const BorderSide(color: Color.fromARGB(255, 255, 107, 129), width: 2), // Cor rosa do degradê
             ),
-            focusedBorder: OutlineInputBorder(
-              // Borda para estado focado
+            focusedBorder: OutlineInputBorder( // Borda para estado focado
               borderRadius: BorderRadius.circular(10),
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 160, 132, 232),
-                width: 2,
-              ), // Cor roxa do degradê
+              borderSide: const BorderSide(color: Color.fromARGB(255, 160, 132, 232), width: 2), // Cor roxa do degradê
             ),
-            errorBorder: OutlineInputBorder(
-              // Borda para erro
+            errorBorder: OutlineInputBorder( // Borda para erro
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Colors.red, width: 2),
             ),
-            focusedErrorBorder: OutlineInputBorder(
-              // Borda para erro e focado
+            focusedErrorBorder: OutlineInputBorder( // Borda para erro e focado
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(color: Colors.redAccent, width: 2),
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 15,
-              horizontal: 15,
-            ), // Preenchimento interno
+            contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15), // Preenchimento interno
           ),
           validator: validator, // Função de validação
         ),

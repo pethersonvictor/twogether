@@ -17,8 +17,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
   final TextEditingController senhaController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _registerUser() async {
-    // Renomeado para clareza
+  Future<void> _registerUser() async { // Renomeado para clareza
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -40,18 +39,16 @@ class _CadastroScreenState extends State<CadastroScreen> {
             username: response['user']['username'],
             email: response['user']['email'],
           );
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(response['message'])));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(response['message'])),
+          );
           // Navega para a tela principal (MainAppScreen)
           Navigator.pushReplacementNamed(context, '/home');
         }
       } catch (e) {
         // Exibe a mensagem de erro da API
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString().replaceFirst('Exception: ', '')),
-          ), // Remove "Exception: "
+          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))), // Remove "Exception: "
         );
       } finally {
         setState(() {
@@ -85,10 +82,9 @@ class _CadastroScreenState extends State<CadastroScreen> {
                 const Text(
                   "Crie sua conta", // Removido "(UI Test)"
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 30.0),
                 TextFormField(
@@ -135,23 +131,16 @@ class _CadastroScreenState extends State<CadastroScreen> {
                 _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
                     : ElevatedButton(
-                      onPressed:
-                          _registerUser, // Chama a função real de registro
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 40,
-                          vertical: 12,
+                        onPressed: _registerUser, // Chama a função real de registro
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                        child: const Text("Cadastrar", style: TextStyle(color: Colors.white, fontSize: 16)), // Removido "(UI Test)"
                       ),
-                      child: const Text(
-                        "Cadastrar",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
-                      ), // Removido "(UI Test)"
-                    ),
               ],
             ),
           ),
@@ -170,10 +159,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
         borderSide: BorderSide.none,
         borderRadius: BorderRadius.circular(10),
       ),
-      errorStyle: const TextStyle(
-        color: Color.fromARGB(255, 255, 255, 255),
-        fontWeight: FontWeight.bold,
-      ),
+      errorStyle: const TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontWeight: FontWeight.bold),
     );
   }
 

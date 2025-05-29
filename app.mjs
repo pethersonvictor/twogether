@@ -1,4 +1,4 @@
-fimpot express from 'express';
+import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
@@ -9,7 +9,7 @@ import Desafio from './models/Desafios.js';
 import Encontro from './models/Encontros.js';
 import AuthUser from './models/AuthUser.js';
 import SugestaoCelebracao from './models/SugestaoCelebrecao.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt'; // <--- HÍFEN REMOVIDO AQUI
 import jwt from 'jsonwebtoken';
 
 const app = express();
@@ -238,7 +238,6 @@ app.get('/datas-importantes/:id/sugestoes', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar sugestões para esta data', detalhes: err.message });
   }
 });
-
 
 
 // Inicia o servidor

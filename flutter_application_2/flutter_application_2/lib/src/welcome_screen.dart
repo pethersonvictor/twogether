@@ -61,10 +61,7 @@ class _MyWidgetState extends State<MyWidget> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    'Entrar',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  child: const Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
 
@@ -85,10 +82,7 @@ class _MyWidgetState extends State<MyWidget> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Text(
-                    'Cadastrar',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
+                  child: const Text('Cadastrar', style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ],
